@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jumpscare</title>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        background: black;
+    }
+    #bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    #overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        background: rgba(0,0,0,0.85);
+        z-index: 50;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+    }
+    #playBtn {
+        padding: 18px 36px;
+        font-size: 22px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff4b4b, #ff0000);
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #playBtn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    #note {
+        font-size: 16px;
+        opacity: 0.9;
+        max-width: 90%;
+    }
+</style>
+</head>
+<body>
+
+<!-- Görsel -->
+<img id="bg" src="jumpscare.jpg" alt="Jumpscare">
+
+<!-- Ses dosyası -->
+<audio id="audio" src="jumpscare.mp3" preload="auto"></audio>
+
+<!-- Overlay -->
+<div id="overlay">
+    <div id="note">Başlamak için tıklayın.</div>
+    <button id="playBtn">Tıkla ve devam et</button>
+</div>
+
+<script>
+const audio = document.getElementById('audio');
+const overlay = document.getElementById('overlay');
+const playBtn = document.getElementById('playBtn');
+
+playBtn.addEventListener('click', async () => {
+    try {
+        await audio.play();
+    } catch(e) {
+        console.log("Oynatma hatası:", e);
+    }
+    // tam ekran
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen().catch(()=>{});
+    else if (el.msRequestFullscreen) el.msRequestFullscreen().catch(()=>{});
+
+    overlay.style.display = 'none'; // overlayi kaldır
+});
+</script>
+
+</body>
+</html>
