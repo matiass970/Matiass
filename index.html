@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jumpscare</title>
+<title>Matias</title>
 <style>
     html, body {
         margin: 0;
@@ -12,6 +12,7 @@
         width: 100%;
         overflow: hidden;
         background: black;
+        cursor: pointer; /* kullanıcıya tıklanabilir hissi verir */
     }
     #bg {
         position: absolute;
@@ -22,71 +23,57 @@
         height: 100%;
         object-fit: cover;
     }
-    #overlay {
+    #info {
         position: fixed;
         inset: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-        gap: 20px;
-        background: rgba(0,0,0,0.85);
-        z-index: 50;
+        background: rgba(0, 0, 0, 0.7);
         color: #fff;
-        font-family: 'Arial', sans-serif;
-        text-align: center;
-    }
-    #playBtn {
-        padding: 18px 36px;
+        font-family: Arial, sans-serif;
         font-size: 22px;
-        font-weight: bold;
-        background: linear-gradient(45deg, #ff4b4b, #ff0000);
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    #playBtn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-    }
-    #note {
-        font-size: 16px;
-        opacity: 0.9;
-        max-width: 90%;
+        text-align: center;
+        z-index: 10;
+        user-select: none;
     }
 </style>
 </head>
 <body>
 
-<!-- Görsel -->
+<!-- Arka plan görsel -->
 <img id="bg" src="jumpscare.jpg" alt="Jumpscare">
 
 <!-- Ses dosyası -->
 <audio id="audio" src="jumpscare.mp3" preload="auto"></audio>
 
-
+<!-- Bilgi yazısı -->
+<div id="info"></div>
 
 <script>
 const audio = document.getElementById('audio');
-const overlay = document.getElementById('overlay');
-const playBtn = document.getElementById('playBtn');
+const info = document.getElementById('info');
 
-playBtn.addEventListener('click', async () => {
+async function startJumpscare() {
     try {
         await audio.play();
-    } catch(e) {
-        console.log("Oynatma hatası:", e);
-    }
-    // tam ekran
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen().catch(()=>{});
-    else if (el.msRequestFullscreen) el.msRequestFullscreen().catch(()=>{});
+        // Tam ekran yap
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen().catch(()=>{});
+        else if (el.msRequestFullscreen) el.msRequestFullscreen().catch(()=>{});
 
-    overlay.style.display = 'none'; // overlayi kaldır
-});
+        info.style.display = 'none'; // bilgilendirme yazısını gizle
+        document.removeEventListener('click', startJumpscare);
+        document.removeEventListener('touchstart', startJumpscare);
+    } catch (e) {
+        console.log("Ses oynatma hatası:", e);
+    }
+}
+
+// Ekranın herhangi bir yerine tıklama veya dokunma algılansın
+document.addEventListener('click', startJumpscare);
+document.addEventListener('touchstart', startJumpscare);
 </script>
 
 </body>
